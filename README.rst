@@ -1,9 +1,9 @@
 Data structures in Scala
 ========================
 
-.. image:: https://circleci.com/gh/pavlov99/scalastructures.svg?style=shield&circle-token=
-   :alt: CircleCI build
-   :target: https://circleci.com/gh/pavlov99/scalastructures
+.. image:: https://circleci.com/gh/pavlov99/scalastructures/tree/master.svg?style=shield
+    :alt: CircleCI build
+    :target: https://circleci.com/gh/pavlov99/scalastructures/tree/master
 
 Data Structures written in scala
 
