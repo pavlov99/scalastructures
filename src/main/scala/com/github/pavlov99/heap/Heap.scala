@@ -2,15 +2,15 @@ package com.github.pavlov99
 
 class Heap[T: Ordering](val keys: Vector[T]) {
   val keyOrdering = implicitly[Ordering[T]]
-  def size = keys.size
-  def isEmpty = keys.isEmpty
-  override def toString = keys.toString
-  
+  def size: Int = keys.size
+  def isEmpty: Boolean = keys.isEmpty
+  override def toString: String = keys.toString
+
   /** Insert element to the heap
   * Add element to the end of the heap and sift last element up.
   */
   def insert(key: T): Heap[T] = new Heap(keys :+ key) siftUp size
-  def :+ (key: T) = insert(key)
+  def :+ (key: T): Heap[T] = insert(key)  // scalastyle:ignore method.name
 
   /** Extract minimal element according to current ordering.
    *  @returns (element, new heap)
@@ -22,22 +22,22 @@ class Heap[T: Ordering](val keys: Vector[T]) {
    */
   def heapify(): Heap[T] = heapify0(size / 2 to 0 by -1)
   private def heapify0(indexes: Seq[Int]): Heap[T] = {
-    if (indexes.isEmpty) this
-    else this siftDown indexes.head heapify0 indexes.tail
+    if (indexes.isEmpty) {this}
+    else {this siftDown indexes.head heapify0 indexes.tail}
   }
-  
-  /** Swap two elements in vector and return result vector.*/
-  private def swap(xs: Vector[T], i: Int, j: Int): Vector[T] = xs updated (i, xs(j)) updated (j, xs(i))
-  
-  /** Sift keys down. Method operates only on keys.*/
+
+  /** Swap two elements in vector and return result vector. */
+  private def swap(xs: Vector[T], i: Int, j: Int): Vector[T] =
+    xs updated (i, xs(j)) updated (j, xs(i))
+
+  /** Sift keys down. Method operates only on keys. */
   private def siftDownKeys(keys: Vector[T], i: Int): Vector[T] = {
     while (2 * i + 1 < size) {
       val left = 2 * i + 1  // left child
       val right = left + 1  // right child
       var j = left
       // keys(right) < keys(left)
-      if (right < size && keyOrdering.compare(keys(right), keys(left)) < 0)
-        j = right
+      if (right < size && keyOrdering.compare(keys(right), keys(left)) < 0) {j = right}
       if (keyOrdering.compare(keys(i), keys(j)) <= 0) return keys
       return siftDownKeys(swap(keys, i, j), j)
     }
@@ -51,7 +51,7 @@ class Heap[T: Ordering](val keys: Vector[T]) {
    */
   private def siftDown(i: Int): Heap[T] = new Heap(siftDownKeys(keys, i))
 
-  /** Sift keys up. Method operates only on keys.*/
+  /** Sift keys up. Method operates only on keys. */
   private def siftUpKeys(keys: Vector[T], i: Int): Vector[T] = {
     val j = (i - 1) / 2
     while (keyOrdering.compare(keys(i), keys(j)) < 0)
