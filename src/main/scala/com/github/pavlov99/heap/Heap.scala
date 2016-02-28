@@ -4,7 +4,7 @@ class Heap[T: Ordering](val keys: Vector[T]) {
   val keyOrdering = implicitly[Ordering[T]]
   def size: Int = keys.size
   def isEmpty: Boolean = keys.isEmpty
-  override def toString: String = keys.toString
+  override def toString: String = keys.mkString("Heap(", ", ", ")")
 
   /** Insert element to the heap
   * Add element to the end of the heap and sift last element up.
