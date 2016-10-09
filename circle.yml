@@ -1,0 +1,9 @@
+test:
+    override:
+        - sbt +test
+    post:
+        - sbt scalastyle
+        - sbt test:scalastyle
+        - sbt +package
+        - mkdir $CIRCLE_ARTIFACTS/builds
+        - find . -type f -name "*.jar" -exec bash -c 'mv {} $CIRCLE_ARTIFACTS/builds' \;
