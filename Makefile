@@ -7,7 +7,7 @@ help:
 .PHONY: test
 # target: test - Test functionality and code style
 test:
-	sbt test scalastyle test:scalastyle
+	sbt +test scalastyle test:scalastyle
 
 
 .PHONY: build

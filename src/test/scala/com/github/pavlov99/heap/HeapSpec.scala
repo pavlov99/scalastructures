@@ -31,7 +31,7 @@ class HeapSpec extends FlatSpec {
   }
 
   it should "allow simple init" in {
-    assert(Heap().keys == Vector())
+    assert(Heap(Vector[Int](): _*).keys == Vector())
     assert(Heap(1, 2, 3).keys == Vector(1, 2, 3))
   }
 
