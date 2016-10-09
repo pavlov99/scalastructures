@@ -1,7 +1,5 @@
 package com.github.pavlov99
 
-import scala.collection.immutable.Stack
-
 
 abstract sealed class Treap[+K <% Ordered[K], +P <% Ordered[P]]{
   def key: K
@@ -134,18 +132,17 @@ object Treap {
     xs.foldLeft(Treap.empty[K, P])({case(t, (k, p)) => t.insert(k, p)})
 
   def fromOrdered[K <% Ordered[K], P <% Ordered[P]](xs: (K, P)*): Treap[K, P] = {
-    def loop(k: K, p: P, path: Stack[Treap[K, P]], left: Treap[K, P] = Leaf): Stack[Treap[K, P]] =
+    def add(k: K, p: P, path: List[Treap[K, P]], left: Treap[K, P] = Leaf): List[Treap[K, P]] =
       if (path.isEmpty) {
-        path.push(Treap.make(k, p, left))
-      } else if (p < path.top.priority) {
+        Treap.make(k, p, left) :: path
+      } else if (p < path.head.priority) {
         val t = Treap.make(k, p, left)
-        path.pop.push(
-          Treap.make(path.top.key, path.top.priority, path.top.left, t)).push(t)
+        t ::  Treap.make(path.head.key, path.head.priority, path.head.left, t) :: path.tail
       } else {
-        loop(k, p, path.pop, path.top)
+        add(k, p, path.tail, path.head)
       }
 
-    val path = xs.foldLeft(Stack[Treap[K, P]]())({case(s, (k, p)) => loop(k, p, s)})
+    val path = xs.foldLeft(List[Treap[K, P]]())({case(s, (k, p)) => add(k, p, s)})
     if (path.isEmpty) {
       Treap.empty[K, P]
     } else {

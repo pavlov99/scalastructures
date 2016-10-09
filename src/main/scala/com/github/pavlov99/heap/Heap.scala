@@ -1,5 +1,6 @@
 package com.github.pavlov99
 
+// scalastyle:off return
 class Heap[T: Ordering](val keys: Vector[T]) {
   val keyOrdering = implicitly[Ordering[T]]
   def size: Int = keys.size
@@ -72,3 +73,4 @@ class Heap[T: Ordering](val keys: Vector[T]) {
 object Heap {
   def apply[T: Ordering](keys: T*): Heap[T] = new Heap(Vector(keys: _*)) heapify
 }
+// scalastyle:on
