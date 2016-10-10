@@ -16,6 +16,28 @@ abstract sealed class Treap[+K <% Ordered[K], +P <% Ordered[P]]{
       "{" + left + "(" + key + ", " + priority + ")" + right + "}"
     }
 
+  override def equals(that: Any): Boolean =
+    that match {
+      case that: Treap[K, P] =>
+        if (isEmpty && that.isEmpty) {
+          true
+        } else if (isEmpty ^ that.isEmpty) {
+          false
+        } else {
+          key == that.key && priority == that.priority &&
+          left == that.left && right == that.right
+        }
+      case _ => false
+    }
+
+  override def hashCode: Int = {
+    if (isEmpty) {
+      0
+    } else {
+      key.hashCode + priority.hashCode + left.hashCode + right.hashCode
+    }
+  }
+
   def split[K1 >: K <% Ordered[K1]](k: K1): (Treap[K, P], Treap[K, P]) =
     if (isEmpty) {
       (Treap.empty[K, P], Treap.empty[K, P])
@@ -130,23 +152,4 @@ object Treap {
 
   def apply[K <% Ordered[K], P <% Ordered[P]](xs: (K, P)*): Treap[K, P] =
     xs.foldLeft(Treap.empty[K, P])({case(t, (k, p)) => t.insert(k, p)})
-
-  def fromOrdered[K <% Ordered[K], P <% Ordered[P]](xs: (K, P)*): Treap[K, P] = {
-    def add(k: K, p: P, path: List[Treap[K, P]], left: Treap[K, P] = Leaf): List[Treap[K, P]] =
-      if (path.isEmpty) {
-        Treap.make(k, p, left) :: path
-      } else if (p < path.head.priority) {
-        val t = Treap.make(k, p, left)
-        t ::  Treap.make(path.head.key, path.head.priority, path.head.left, t) :: path.tail
-      } else {
-        add(k, p, path.tail, path.head)
-      }
-
-    val path = xs.foldLeft(List[Treap[K, P]]())({case(s, (k, p)) => add(k, p, s)})
-    if (path.isEmpty) {
-      Treap.empty[K, P]
-    } else {
-      path.last
-    }
-  }
 }

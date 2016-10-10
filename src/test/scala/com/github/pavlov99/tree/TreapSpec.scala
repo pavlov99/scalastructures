@@ -29,9 +29,8 @@ class TreapSpec extends FlatSpec {
     }
   }
 
-  it should "allow creation from ordered by key pairs" in {
-    val t = Treap.fromOrdered((1, 1), (2, 3), (3, 2), (4, 4), (5, 2), (6, 1), (7, 3))
-    assert(t.key == 4)
-    assert(t.priority == 4)
+  it should "be equal to itself" in {
+    val t = Treap((1, 1), (2, 2))
+    assert(t == t)
   }
 }
