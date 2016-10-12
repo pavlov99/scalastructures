@@ -33,4 +33,12 @@ class TreapSpec extends FlatSpec {
     val t = Treap((1, 1), (2, 2))
     assert(t == t)
   }
+
+  it should "sum elements" in {
+    val t = Treap((1, 1), (2, 4), (3, 8))
+    val psum = t.fold(0)({case(n, (k, p)) => n + p})
+    val kprod = t.fold(1)({case(n, (k, p)) => n * k})
+    assert(psum == 13)
+    assert(kprod == 6)
+  }
 }

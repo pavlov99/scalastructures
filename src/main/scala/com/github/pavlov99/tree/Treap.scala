@@ -30,13 +30,8 @@ abstract sealed class Treap[+K <% Ordered[K], +P <% Ordered[P]]{
       case _ => false
     }
 
-  override def hashCode: Int = {
-    if (isEmpty) {
-      0
-    } else {
-      key.hashCode + priority.hashCode + left.hashCode + right.hashCode
-    }
-  }
+  override def hashCode: Int =
+    if (isEmpty) 0 else key.hashCode + priority.hashCode + left.hashCode + right.hashCode
 
   def split[K1 >: K <% Ordered[K1]](k: K1): (Treap[K, P], Treap[K, P]) =
     if (isEmpty) {
@@ -121,6 +116,12 @@ abstract sealed class Treap[+K <% Ordered[K], +P <% Ordered[P]]{
     } else {
       loop(right, key, priority)
     }
+  }
+
+  def fold[A](accu: A)(op: (A, (K, P)) => A): A = {
+    def loop(t: Treap[K, P], accu: A): A =
+      if (t.isEmpty) accu else loop(t.right, op(loop(t.left, accu), (t.key, t.priority)))
+    loop(this, accu)
   }
 }
 
