@@ -41,4 +41,12 @@ class TreapSpec extends FlatSpec {
     assert(psum == 13)
     assert(kprod == 6)
   }
+
+  it should "merge correctly" in {
+    val t1 = Treap((1, 1), (2, 1), (3, 0))
+    val t2 = Treap((1, 2), (-1, 1), (1, 0))
+    val t = t1 ++ t2
+    assert((t.key, t.priority) == (1, 2))
+    assert((t.right.key, t.right.priority) == (2, 1))
+  }
 }
